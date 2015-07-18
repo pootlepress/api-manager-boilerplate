@@ -53,7 +53,6 @@ class API_Manager_Example_Update_API_Check {
 	 *
 	 * @access public
 	 * @since  1.0.0
-	 * @return void
 	 */
 	public function __construct( $upgrade_url, $plugin_name, $product_id, $api_key, $activation_email, $renew_license_url, $instance, $domain, $software_version, $plugin_or_theme, $text_domain, $extra ) {
 		// API data
@@ -101,29 +100,11 @@ class API_Manager_Example_Update_API_Check {
 		 * _site_transient_update_plugins
 		 */
 
-		// uses the flag above to determine if this is a plugin or a theme update request
-		if ( $this->plugin_or_theme == 'plugin' ) {
-			/**
-			 * Plugin Updates
-			 */
-			// Check For Plugin Updates
-			add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'update_check' ) );
+		// Check For Plugin Updates
+		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'update_check' ) );
 
-			// Check For Plugin Information to display on the update details page
-			add_filter( 'plugins_api', array( $this, 'request' ), 10, 3 );
-
-		} else if ( $this->plugin_or_theme == 'theme' ) {
-			/**
-			 * Theme Updates
-			 */
-			// Check For Theme Updates
-			add_filter( 'pre_set_site_transient_update_themes', array( $this, 'update_check' ) );
-
-			// Check For Theme Information to display on the update details page
-			//add_filter( 'themes_api', array( $this, 'request' ), 10, 3 );
-
-		}
-
+		// Check For Plugin Information to display on the update details page
+		add_filter( 'plugins_api', array( $this, 'request' ), 10, 3 );
 	}
 
 	// Upgrade API URL

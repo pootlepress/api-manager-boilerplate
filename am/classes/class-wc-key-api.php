@@ -40,10 +40,10 @@ class Api_Manager_Example_Key {
 
 		$defaults = array(
 			'request' 			=> 'activation',
-			'product_id' 		=> AME()->ame_product_id,
-			'instance' 			=> AME()->ame_instance_id,
-			'platform' 			=> AME()->ame_domain,
-			'software_version' 	=> AME()->ame_software_version
+			'product_id' 		=> AME()->product_id,
+			'instance' 			=> AME()->instance_id,
+			'platform' 			=> AME()->domain,
+			'software_version' 	=> AME()->software_version
 			);
 
 		$args = wp_parse_args( $defaults, $args );
@@ -51,8 +51,6 @@ class Api_Manager_Example_Key {
 		$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
 
 		$request = wp_remote_get( $target_url );
-
-		// $request = wp_remote_post( AME()->upgrade_url . 'wc-api/am-software-api/', array( 'body' => $args ) );
 
 		if( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
 		// Request failed
@@ -68,9 +66,9 @@ class Api_Manager_Example_Key {
 
 		$defaults = array(
 			'request' 		=> 'deactivation',
-			'product_id' 	=> AME()->ame_product_id,
-			'instance' 		=> AME()->ame_instance_id,
-			'platform' 		=> AME()->ame_domain
+			'product_id' 	=> AME()->product_id,
+			'instance' 		=> AME()->instance_id,
+			'platform' 		=> AME()->domain
 			);
 
 		$args = wp_parse_args( $defaults, $args );
@@ -78,8 +76,6 @@ class Api_Manager_Example_Key {
 		$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
 
 		$request = wp_remote_get( $target_url );
-
-		// $request = wp_remote_post( AME()->upgrade_url . 'wc-api/am-software-api/', array( 'body' => $args ) );
 
 		if( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
 		// Request failed
@@ -100,9 +96,9 @@ class Api_Manager_Example_Key {
 
 		$defaults = array(
 			'request' 		=> 'status',
-			'product_id' 	=> AME()->ame_product_id,
-			'instance' 		=> AME()->ame_instance_id,
-			'platform' 		=> AME()->ame_domain
+			'product_id' 	=> AME()->product_id,
+			'instance' 		=> AME()->instance_id,
+			'platform' 		=> AME()->domain
 			);
 
 		$args = wp_parse_args( $defaults, $args );
@@ -110,8 +106,6 @@ class Api_Manager_Example_Key {
 		$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
 
 		$request = wp_remote_get( $target_url );
-
-		// $request = wp_remote_post( AME()->upgrade_url . 'wc-api/am-software-api/', array( 'body' => $args ) );
 
 		if( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
 		// Request failed
