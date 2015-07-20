@@ -2,8 +2,8 @@
 /**
  * Plugin Name: API Manager Boilerplate
  * Plugin URI: http://www.pootlepress.com/
- * Description: API manager plugin boilerplate
- * Version: 0.1.2
+ * Description: This is for simple API manager integration
+ * Version: 0.2.0
  * Author: pootlepress
  * Author URI: https://www.pootlepress.com/
  */
@@ -11,25 +11,30 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class API_Manager_Example {
+/**
+ * Admin menu with the license key and license email form
+ * class PootlePress_API_Manager_Menu
+ */
+require plugin_dir_path( __FILE__ ) . 'pp-api/admin/class-wc-api-manager-menu.php';
+
+class API_Manager_Example extends PootlePress_API_Manager_Menu {
 
 	/** @var string Base URL to the remote upgrade API Manager server */
 	public $upgrade_url = 'http://shramee.thisistap.com/';
 
 	/** @var string Version */
-	public $version = '0.1.2';
-
+	public $version = '0.2.0';
 	/** @var string Token for this plugin */
 	public $token = 'api_manager_example';
-
 	/** @var string Plugin name */
 	public $name = 'API Manager Boilerplate';
+	/** @var string Plugin name */
+	public $file = __FILE__;
+	/** @var string Plugin textdomain */
+	public $text_domain;
 
 	/** @var string */
 	public $plugin_url;
-
-	/** @var string Plugin textdomain */
-	public $text_domain;
 
 	/**
 	 * Data defaults
@@ -38,8 +43,6 @@ class API_Manager_Example {
 	private $software_product_id;
 
 	public $data_key;
-	public $api_key;
-	public $activation_email;
 	public $instance_key;
 	public $deactivate_checkbox_key;
 	public $activated_key;
@@ -107,7 +110,7 @@ class API_Manager_Example {
 		}
 
 		// Run the activation function
-		register_activation_hook( __FILE__, array( $this, 'activation' ) );
+		register_activation_hook( $this->file, array( $this, 'activation' ) );
 
 		if ( is_admin() ) {
 
@@ -124,8 +127,6 @@ class API_Manager_Example {
 			 * Set all data defaults here
 			 */
 			$this->data_key 				= $this->token;
-			$this->api_key 					= 'api_key';
-			$this->activation_email 		= 'activation_email';
 			$this->instance_key 			= $this->token . '_instance';
 			$this->deactivate_checkbox_key 	= $this->token . '_deactivate_checkbox';
 			$this->activated_key 			= $this->token . '_activated';
@@ -133,19 +134,19 @@ class API_Manager_Example {
 			/**
 			 * Set all admin menu data
 			 */
-			$this->deactivate_checkbox 			= 'am_deactivate_example_checkbox';
+			$this->deactivate_checkbox 			= $this->token . '_deactivate_license_checkbox';
 			$this->activation_tab_key 			= $this->token . '_dashboard';
 			$this->deactivation_tab_key 		= $this->token . '_deactivation';
 			$this->settings_menu_title 			= $this->name;
 			$this->settings_title 				= $this->name;
-			$this->menu_tab_activation_title 	= __( 'License Activation', 'api-manager-example' );
-			$this->menu_tab_deactivation_title 	= __( 'License Deactivation', 'api-manager-example' );
+			$this->menu_tab_activation_title 	= __( 'License Activation', $this->text_domain );
+			$this->menu_tab_deactivation_title 	= __( 'License Deactivation', $this->text_domain );
 
 			/**
 			 * Set all software update data here
 			 */
 			$this->options 				= get_option( $this->data_key );
-			$this->plugin_name 			= untrailingslashit( plugin_basename( __FILE__ ) ); // same as plugin slug. if a theme use a theme name like 'twentyeleven'
+			$this->plugin_name 			= untrailingslashit( plugin_basename( $this->file ) ); // same as plugin slug. if a theme use a theme name like 'twentyeleven'
 			$this->product_id 			= get_option( $this->token . '_product_id' ); // Software Title
 			$this->renew_license_url 	= 'http://localhost/toddlahman/my-account'; // URL to renew a license. Trailing slash in the upgrade_url is required.
 			$this->instance_id 			= get_option( $this->instance_key ); // Instance ID (unique to each blog activation)
@@ -164,14 +165,11 @@ class API_Manager_Example {
 			$this->software_version 	= $this->version; // The software version
 			$this->plugin_or_theme 		= 'plugin'; // 'theme' or 'plugin'
 
-			// Performs activations and deactivations of API License Keys
-			require_once( plugin_dir_path( __FILE__ ) . 'am/classes/class-wc-key-api.php' );
+			// Performs activation and deactivation of API License Keys
+			require_once( plugin_dir_path( $this->file ) . 'pp-api/classes/class-wc-key-api.php' );
 
-			// Checks for software updatess
-			require_once( plugin_dir_path( __FILE__ ) . 'am/classes/class-wc-plugin-update.php' );
-
-			// Admin menu with the license key and license email form
-			require_once( plugin_dir_path( __FILE__ ) . 'am/admin/class-wc-api-manager-menu.php' );
+			// Checks for software updates
+			require_once( plugin_dir_path( $this->file ) . 'pp-api/classes/class-wc-plugin-update.php' );
 
 			$options = get_option( $this->data_key );
 
@@ -195,13 +193,15 @@ class API_Manager_Example {
 					);
 
 			}
-
 		}
+
+		//Setup menu
+		parent::__construct();
 
 		/**
 		 * Deletes all data if plugin deactivated
 		 */
-		register_deactivation_hook( __FILE__, array( $this, 'uninstall' ) );
+		register_deactivation_hook( $this->file, array( $this, 'uninstall' ) );
 
 	}
 
@@ -210,10 +210,10 @@ class API_Manager_Example {
 	/**
 	 * API Key Class.
 	 *
-	 * @return Api_Manager_Example_Key
+	 * @return PootlePress_Api_Manager_Key
 	 */
 	public function key() {
-		return Api_Manager_Example_Key::instance();
+		return PootlePress_Api_Manager_Key::instance( $this->product_id, $this->instance_id, $this->software_version, $this->upgrade_url, $this->domain );
 	}
 
 	/**
@@ -231,7 +231,7 @@ class API_Manager_Example {
 			return $this->plugin_url;
 		}
 
-		return $this->plugin_url = plugins_url( '/', __FILE__ );
+		return $this->plugin_url = plugins_url( '/', $this->file );
 	}
 
 	/**
@@ -251,7 +251,7 @@ class API_Manager_Example {
 		$instance = $this->generate_password();
 
 		$single_options = array(
-			$this->token . '_product_id' 			=> $this->software_product_id,
+			$this->token . '_product_id' 	=> $this->software_product_id,
 			$this->instance_key 			=> $instance,
 			$this->deactivate_checkbox_key 	=> 'on',
 			$this->activated_key 			=> 'Deactivated',
@@ -345,7 +345,7 @@ class API_Manager_Example {
 		<?php if ( ! current_user_can( 'manage_options' ) ) return; ?>
 		<?php if ( isset( $_GET['page'] ) && 'api_manager_example_dashboard' == $_GET['page'] ) return; ?>
 		<div id="message" class="error">
-			<p><?php printf( __( $this->name . ' API License Key has not been activated, so the plugin is inactive! %sClick here%s to activate the license key and the plugin.', 'api-manager-example' ), '<a href="' . esc_url( admin_url( 'options-general.php?page=api_manager_example_dashboard' ) ) . '">', '</a>' ); ?></p>
+			<p><?php printf( __( $this->name . ' API License Key has not been activated, so the plugin is inactive! %sClick here%s to activate the license key and the plugin.', $this->text_domain ), '<a href="' . esc_url( admin_url( 'options-general.php?page=api_manager_example_dashboard' ) ) . '">', '</a>' ); ?></p>
 		</div>
 		<?php
 	}
@@ -364,7 +364,7 @@ class API_Manager_Example {
 			if( ! defined( 'WP_ACCESSIBLE_HOSTS' ) || stristr( WP_ACCESSIBLE_HOSTS, $host ) === false ) {
 				?>
 				<div class="error">
-					<p><?php printf( __( '<b>Warning!</b> You\'re blocking external requests which means you won\'t be able to get %s updates. Please add %s to %s.', 'api-manager-example' ), $this->software_product_id, '<strong>' . $host . '</strong>', '<code>WP_ACCESSIBLE_HOSTS</code>'); ?></p>
+					<p><?php printf( __( '<b>Warning!</b> You\'re blocking external requests which means you won\'t be able to get %s updates. Please add %s to %s.', $this->text_domain ), $this->software_product_id, '<strong>' . $host . '</strong>', '<code>WP_ACCESSIBLE_HOSTS</code>'); ?></p>
 				</div>
 				<?php
 			}

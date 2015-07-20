@@ -24,10 +24,10 @@ The example plugin can be dropped into a plugin product using the following inst
 * Copy and paste all the code from `if ( ! defined( 'ABSPATH' ) ) exit;` to the bottom of the api-manager-example.php file into your main plugin file. For example, /wp-content/my-plugin/my-plugin.php is the file the code needs to be copied into `if ( ! defined( 'ABSPATH' ) ) exit;` is a line of code the provides security for the file. If you already have `if ( ! defined( 'ABSPATH' ) ) exit;` in your  main plugin file, you can omit this line. Don't copy the plugin header file, or it will conflict with your plugin's header file, or things won't work.
 * Change the class names so they are unique to your plugin. Below is a list of classnames to change.
 	* API_Manager_Example found in api-manager-example.php
-	* API_Manager_Example_MENU found in /am/admin/class-wc-api-manager-menu.php
-	* API_Manager_Example_Password_Management found in /am/classes/class-wc-api-manager-passwords.php
-	* Api_Manager_Example_Key found in /am/classes/class-wc-key-api.php
-	* API_Manager_Example_Update_API_Check found in /am/classes/class-wc-plugin-update.php
+	* PootlePress_API_Manager_Menu found in /pp-api/admin/class-wc-api-manager-menu.php
+	* API_Manager_Example_Password_Management found in /pp-api/classes/class-wc-api-manager-passwords.php
+	* Api_Manager_Example_Key found in /pp-api/classes/class-wc-key-api.php
+	* API_Manager_Example_Update_API_Check found in /pp-api/classes/class-wc-plugin-update.php
 * Change the values in the api-manager-example.php file so they are unique to your plugin. Many of these values will be saved in the options table of the database. For many of the values using find or replace to change `api_manager_example` to your plugin's name will speed up this process. Once the values are changed, the api-manager-example.php does not need to be moved to your plugin directory, only the class in api-manager-example.php needs to be copied to your plugin's main file. Since the code from api-manager-example.php is contained in a class, there will be no conflict with your plugin. Change the following values.
  	* `api_manager_example_activated` - string
  	* `API_Manager_Example` - class name must match the main example plugin class name.
@@ -52,9 +52,9 @@ The example plugin can be dropped into a plugin product using the following inst
  	* `$this->menu_tab_activation_title` - class variable, change the value.
  	* `$this->menu_tab_deactivation_title` - class variable, change the value.
  	* `$this->renew_license_url` - class variable, change the value.
- 	* `Api_Manager_Example_Key` - class name, must match the class name in `am/classes/class-wc-key-api.php`
- 	* `API_Manager_Example_Update_API_Check` - class name, must match the class name in `am/classes/class-wc-plugin-update.php`
- 	* `API_Manager_Example_Password_Management` - class name, must match the class name in `am/classes/class-wc-api-manager-passwords.php`
+ 	* `Api_Manager_Example_Key` - class name, must match the class name in `pp-api/classes/class-wc-key-api.php`
+ 	* `API_Manager_Example_Update_API_Check` - class name, must match the class name in `pp-api/classes/class-wc-plugin-update.php`
+ 	* `API_Manager_Example_Password_Management` - class name, must match the class name in `pp-api/classes/class-wc-api-manager-passwords.php`
  	* `am_example_inactive_notice()` - class method,  must match the method name in `add_action( 'admin_notices', 'API_Manager_Example::am_example_inactive_notice' );` located just above the `API_Manager_Example` class name
  	* `api_manager_example_dashboard` - string, found inside the `am_example_inactive_notice()` static method. Must match the `$this->activation_tab_key` class variable.
  	* In the line `<p><?php printf( __( 'The API Manager Example API License Key has not been activated, so the plugin is inactive! %sClick here%s to activate the license key and the plugin.', 'api-manager-example' ), '<a href="' . esc_url( admin_url( 'options-general.php?page=api_manager_example_dashboard' ) ) . '">', '</a>' ); ?></p>`, change `The API Manager Example` to match your plugin's name, and `api_manager_example_dashboard` to match the `$this->activation_tab_key` class variable.

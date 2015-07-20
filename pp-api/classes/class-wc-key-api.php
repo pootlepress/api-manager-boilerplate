@@ -12,26 +12,34 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-class Api_Manager_Example_Key {
+class PootlePress_Api_Manager_Key {
 
     /**
      * @var The single instance of the class
      */
     protected static $_instance = null;
 
-    public static function instance() {
+    public static function instance( $product_id, $instance_id, $software_version, $upgrade_url, $domain ) {
 
         if ( is_null( self::$_instance ) ) {
-        	self::$_instance = new self();
+        	self::$_instance = new self( $product_id, $instance_id, $software_version, $upgrade_url, $domain );
         }
 
         return self::$_instance;
     }
 
+	public function __construct( $product_id, $instance_id, $software_version, $upgrade_url, $domain ) {
+		$this->product_id = $product_id;
+		$this->instance_id = $instance_id;
+		$this->software_version = $software_version;
+		$this->upgrade_url = $upgrade_url;
+		$this->domain = $domain;
+	}
+
 	// API Key URL
 	public function create_software_api_url( $args ) {
 
-		$api_url = add_query_arg( 'wc-api', 'am-software-api', AME()->upgrade_url );
+		$api_url = add_query_arg( 'wc-api', 'am-software-api', $this->upgrade_url );
 
 		return $api_url . '&' . http_build_query( $args );
 	}
@@ -40,10 +48,10 @@ class Api_Manager_Example_Key {
 
 		$defaults = array(
 			'request' 			=> 'activation',
-			'product_id' 		=> AME()->product_id,
-			'instance' 			=> AME()->instance_id,
-			'platform' 			=> AME()->domain,
-			'software_version' 	=> AME()->software_version
+			'product_id' 		=> $this->product_id,
+			'instance' 			=> $this->instance_id,
+			'platform' 			=> $this->domain,
+			'software_version' 	=> $this->software_version
 			);
 
 		$args = wp_parse_args( $defaults, $args );
@@ -66,9 +74,9 @@ class Api_Manager_Example_Key {
 
 		$defaults = array(
 			'request' 		=> 'deactivation',
-			'product_id' 	=> AME()->product_id,
-			'instance' 		=> AME()->instance_id,
-			'platform' 		=> AME()->domain
+			'product_id' 	=> $this->product_id,
+			'instance' 		=> $this->instance_id,
+			'platform' 		=> $this->domain
 			);
 
 		$args = wp_parse_args( $defaults, $args );
@@ -96,9 +104,9 @@ class Api_Manager_Example_Key {
 
 		$defaults = array(
 			'request' 		=> 'status',
-			'product_id' 	=> AME()->product_id,
-			'instance' 		=> AME()->instance_id,
-			'platform' 		=> AME()->domain
+			'product_id' 	=> $this->product_id,
+			'instance' 		=> $this->instance_id,
+			'platform' 		=> $this->domain
 			);
 
 		$args = wp_parse_args( $defaults, $args );
