@@ -70,6 +70,15 @@ if ( ! class_exists( 'PootlePress_API_Manager' ) ) {
 		 */
 		public $extra;
 
+		/**
+		 * Magic constructor for initiating API manager
+		 * @param string $token
+		 * @param string $name
+		 * @param string $version
+		 * @param string $file
+		 * @param string|null $text_domain
+		 * @param string $upgrade_url
+		 */
 		public function __construct( $token, $name, $version, $file, $text_domain = null, $upgrade_url = 'http://pootlepress.com/' ) {
 
 			$this->upgrade_url = $upgrade_url;
