@@ -14,20 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class PootlePress_Api_Manager_Key {
 
-    /**
-     * @var The single instance of the class
-     */
-    protected static $_instance = null;
-
-    public static function instance( $product_id, $instance_id, $software_version, $upgrade_url, $domain ) {
-
-        if ( is_null( self::$_instance ) ) {
-        	self::$_instance = new self( $product_id, $instance_id, $software_version, $upgrade_url, $domain );
-        }
-
-        return self::$_instance;
-    }
-
 	public function __construct( $product_id, $instance_id, $software_version, $upgrade_url, $domain ) {
 		$this->product_id = $product_id;
 		$this->instance_id = $instance_id;

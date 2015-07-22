@@ -12,28 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  */
 
-class API_Manager_Example_Update_API_Check {
-
-	/**
-	 * @var The single instance of the class
-	 */
-	protected static $_instance = null;
-
-	/**
-	 *
-	 * Ensures only one instance is loaded or can be loaded.
-	 *
-	 * @static
-	 * @return class instance
-	 */
-	public static function instance( $upgrade_url, $plugin_name, $product_id, $api_key, $activation_email, $renew_license_url, $instance, $domain, $software_version, $plugin_or_theme, $text_domain, $extra = '' ) {
-
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self( $upgrade_url, $plugin_name, $product_id, $api_key, $activation_email, $renew_license_url, $instance, $domain, $software_version, $plugin_or_theme, $text_domain, $extra );
-		}
-
-		return self::$_instance;
-	}
+class PootlePress_Api_Manager_Update_Check {
 
 	private $upgrade_url; // URL to access the Update API Manager.
 	private $plugin_name;

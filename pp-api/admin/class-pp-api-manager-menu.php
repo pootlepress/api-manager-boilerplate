@@ -1,12 +1,9 @@
 <?php
 
 /**
- * Admin Menu Class
+ * Pooltepress Admin Menu Class
  *
  * @package Update API Manager/Admin
- * @author Todd Lahman LLC
- * @copyright   Copyright (c) Todd Lahman LLC
- * @since 1.3
  *
  */
 
@@ -186,7 +183,7 @@ if ( ! class_exists( 'PootlePress_API_Manager_Menu' ) ) {
 						'licence_key' => $api_key,
 					);
 
-					$activate_results = json_decode( $this->key()->activate( $args ), true );
+					$activate_results = json_decode( $this->key_class->activate( $args ), true );
 
 					if ( $activate_results['activated'] === true ) {
 						add_settings_error( 'activate_text', 'activate_msg', __( 'Plugin activated. ', $this->text_domain ) . "{$activate_results['message']}.", 'updated' );
@@ -266,7 +263,7 @@ if ( ! class_exists( 'PootlePress_API_Manager_Menu' ) ) {
 				'licence_key' => $this->options['api_key'],
 			);
 
-			return json_decode( $this->key()->status( $args ), true );
+			return json_decode( $this->key_class->status( $args ), true );
 		}
 
 		// Deactivate the current license key before activating the new license key
@@ -277,7 +274,7 @@ if ( ! class_exists( 'PootlePress_API_Manager_Menu' ) ) {
 				'licence_key' => $current_api_key,
 			);
 
-			$reset = $this->key()->deactivate( $args ); // reset license key activation
+			$reset = $this->key_class->deactivate( $args ); // reset license key activation
 
 			if ( $reset == true ) {
 				return true;
@@ -301,7 +298,7 @@ if ( ! class_exists( 'PootlePress_API_Manager_Menu' ) ) {
 			if ( $options == 'on' && $activation_status == 'Activated' && $this->options['api_key'] != '' && $this->options[ 'activation_email' ] != '' ) {
 
 				// deactivates license key activation
-				$activate_results = json_decode( $this->key()->deactivate( $args ), true );
+				$activate_results = json_decode( $this->key_class->deactivate( $args ), true );
 
 				// Used to display results for development
 				//print_r($activate_results); exit();
